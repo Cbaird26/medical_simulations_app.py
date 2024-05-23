@@ -1,8 +1,12 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-import tensorflow as tf
 from PIL import Image, ImageOps
+
+try:
+    import tensorflow as tf
+except ModuleNotFoundError:
+    st.warning("TensorFlow is not installed. Some functionalities may be limited.")
 
 # Define the main function for the app
 def main():
@@ -73,22 +77,26 @@ def simulate_ai_diagnostics():
     st.header("AI in Diagnostics Simulation")
     st.write("Simulating AI diagnostics using medical imaging...")
     
-    # Load and display a sample image
-    uploaded_file = st.file_uploader("Choose an image...", type="jpg")
-    if uploaded_file is not None:
-        img = Image.open(uploaded_file)
-        st.image(img, caption='Uploaded Image', use_column_width=True)
-        
-        # Preprocess the image
-        img = ImageOps.fit(img, (224, 224), Image.ANTIALIAS)
-        img = np.asarray(img)
-        img = (img.astype(np.float32) / 255.0).reshape((1, 224, 224, 3))
-        
-        # Placeholder for model prediction
-        model = tf.keras.models.load_model('path_to_model.h5')
-        prediction = model.predict(img)
-        
-        st.write(f"Predicted Class: {np.argmax(prediction)}")
+    # Check if TensorFlow is available
+    if 'tensorflow' in sys.modules:
+        # Load and display a sample image
+        uploaded_file = st.file_uploader("Choose an image...", type="jpg")
+        if uploaded_file is not None:
+            img = Image.open(uploaded_file)
+            st.image(img, caption='Uploaded Image', use_column_width=True)
+            
+            # Preprocess the image
+            img = ImageOps.fit(img, (224, 224), Image.ANTIALIAS)
+            img = np.asarray(img)
+            img = (img.astype(np.float32) / 255.0).reshape((1, 224, 224, 3))
+            
+            # Placeholder for model prediction
+            model = tf.keras.models.load_model('path_to_model.h5')
+            prediction = model.predict(img)
+            
+            st.write(f"Predicted Class: {np.argmax(prediction)}")
+    else:
+        st.error("TensorFlow is not installed. AI Diagnostics simulation requires TensorFlow.")
 
 def simulate_telemedicine_remote_monitoring():
     st.header("Telemedicine and Remote Monitoring Simulation")
