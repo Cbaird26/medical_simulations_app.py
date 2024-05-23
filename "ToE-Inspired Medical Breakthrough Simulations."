@@ -10,7 +10,7 @@ except ModuleNotFoundError:
 
 # Define the main function for the app
 def main():
-    st.title("ToE-Inspired Medical Breakthrough Simulations")
+    st.title("ToE-Based Medical Breakthrough Simulations")
     
     # Sidebar for navigation
     st.sidebar.title("Navigation")
